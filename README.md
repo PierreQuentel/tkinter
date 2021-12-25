@@ -31,5 +31,5 @@ Then, in a console window, navigate to the local repository in the subfolder
 "tkinter" and run
 
 ```
-brython-cli __make_package tkinter
+brython-cli --make_package tkinter
 ```
