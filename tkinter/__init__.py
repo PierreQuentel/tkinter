@@ -14,32 +14,6 @@ borderColor = '#008'
 title_bgColor = '#fff'
 title_color = '#000'
 
-class Constant:
-
-    def __init__(self, value):
-        self.value = value
-
-    def __contains__(self, other):
-        if isinstance(other, str):
-            return other in self.value
-        elif isinstance(other, Constant):
-            return other.value in self.value
-        return NotImplemented
-
-    def __eq__(self, other):
-        return other is self \
-            or isinstance(other, str) and other.lower() == self.value
-
-    def __repr__(self):
-        return f"<Constant '{self.value}'>"
-
-def constant_or_str(obj):
-    if isinstance(obj, Constant):
-        return obj.value
-    elif isinstance(obj, str):
-        return obj
-    raise TypeError(f"expected Constant or str, not '{obj.__class__.__name__}'")
-
 # Generate constants
 anchors = "n ne e se s sw w nw center"
 constants = anchors + """
@@ -82,7 +56,7 @@ class _Packed:
         self.side = side
         self.fill = fill
         self.expand = expand
-        if constant_or_str(anchor) not in anchors:
+        if anchor not in anchors:
             raise ValueError(f'bad anchor "{anchor}": ' +
                 'must be n, ne, e, se, s, sw, w, nw, or center')
         self.anchor = anchor
@@ -204,7 +178,7 @@ class _Packer:
         content.style.height = f'{elt.content_height}px'
         content.style.display = 'flex'
 
-        anchor = constant_or_str(elt.anchor)
+        anchor = elt.anchor
 
         if 'W' in anchor:
             parcel.style.justifyContent = 'start'
@@ -393,7 +367,6 @@ class Widget:
 
         # relief
         if (relief := kw.get('relief')) is not None:
-            relief = constant_or_str(relief)
             if relief not in border_styles:
                 raise ValueError(f'invalid relief: {relief}')
 
